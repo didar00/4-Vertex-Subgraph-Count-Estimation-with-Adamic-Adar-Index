@@ -40,7 +40,6 @@ public class FourVertexSubgraphCounter {
 		int[] uPrime = new int[2];
 		int[] vPrime = new int[2];
 
-		//print(edgeTau);
 		// pick middle edge e = (u,v) with probability p_e = T_e/W
 		Random rand = new Random();
 		long x = randomLong();
@@ -60,14 +59,13 @@ public class FourVertexSubgraphCounter {
 		}
 
 
-		//System.out.println("middle edge " + middleEdge.toString());
 		/** selects the neighbors of the middle edge vertex */
 		int u = middleEdge[0];
 		int v = middleEdge[1];
 		// select a random neighbor uPrime different than u
 		int y = rand.nextInt(adj.get(u).size());
-		//System.out.println("size of adj.get(u).size() " + adj.get(u).size());
-		//System.out.println("y value before if uprime " + y);
+
+
 		if (adj.get(u).get(y) == v) {
 			if (y == adj.get(u).size() -1) {
 				y = 0;
@@ -75,7 +73,7 @@ public class FourVertexSubgraphCounter {
 				y++;
 			}
 		}
-		//System.out.println("y value after if uprime " + y);
+		
 		uPrime[0] = adj.get(u).get(y);
 		uPrime[1] = u;
 
@@ -83,8 +81,7 @@ public class FourVertexSubgraphCounter {
 
 		// select a random neighbor vPrime different than v
 		int z = rand.nextInt(adj.get(v).size());
-		//System.out.println("size of adj.get(v).size() " + adj.get(v).size());
-		//System.out.println("z value before if vprime " + z);
+		
 		if (adj.get(v).get(z) == u) {
 			if (z == adj.get(v).size() -1) {
 				z = 0;
@@ -92,17 +89,9 @@ public class FourVertexSubgraphCounter {
 				z++;
 			}
 		}
-		//System.out.println("z value after if vprime " + z);
+		
 		vPrime[0] = v;
 		vPrime[1] = adj.get(v).get(z);
-
-		//System.out.println("uprime " + uPrime);
-		//System.out.println("vprime " + vPrime);
-/*
-		// checks if the selected neighbor vertices are valid
-		if (uPrime == null || vPrime == null)
-			throw new NullPointerException("Edges cannot be null");
-*/
 
 		setOfEdges[0] = uPrime; setOfEdges[1] = middleEdge; setOfEdges[2] = vPrime;
 		
@@ -228,17 +217,6 @@ public class FourVertexSubgraphCounter {
 		return numerator/denumerator;
 	}
 
-/*
-	private long factorial(int n) {
-		long fact = 1;
-		long i = 1;
-		while(i <= n) {
-			fact *= i;
-			i++;
-		}
-		return fact;
-   }
-*/
 
 	public int getDegree(int v) {
 		int degree = 0;
