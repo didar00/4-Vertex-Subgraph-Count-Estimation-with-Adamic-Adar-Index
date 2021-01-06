@@ -12,16 +12,16 @@ public class UndirectedGraph {
 	public long W;
 	public ArrayList<ArrayList<Integer>> adj;
 	public long[][] edgeTau;
-	public long[][] adamicAdarIndex;
+
 	public long offset;
 	public double k;
+	public int edgeTauSize;
 
 
 
-	public UndirectedGraph(double k, int V, int E, String file) {
+	public UndirectedGraph(double k, int V, String file) {
 		if (V < 0) throw new IllegalArgumentException("Number of vertices must be nonnegative");
         this.V = V;
-		this.E = E;
 		offset = 0;
 		this.k = k;
 		
@@ -59,8 +59,13 @@ public class UndirectedGraph {
 			e.printStackTrace();
 		}
 
+		for (int i = 0; i< adj.size(); i++)
+		{
+			E += adj.get(i).size();
+		}
+		E = E/2;
+
 		edgeTau = new long[2*E][3];
-		adamicAdarIndex = new long[2*E][3];
 		W = W(k);
 	}
 
@@ -93,6 +98,7 @@ public class UndirectedGraph {
 	private long W(double k) {
 		long W = 0;
 		int index = 0;
+		
 
 		for (int u = 0; u < V; u++) {
 			int degree1 = adj.get(u).size();
@@ -112,7 +118,7 @@ public class UndirectedGraph {
 
 			}
 		}
-		
+		edgeTauSize = index;
 		return W/2;
 	}
 
@@ -121,10 +127,10 @@ public class UndirectedGraph {
 		ArrayList<Integer> intersection = intersection(adj.get(u), adj.get(v));
 
 		for (int x : intersection) {
-			adamicAdarIndex += 1/Math.log((adj.get(x).size()));
+			adamicAdarIndex += (double) 1/Math.log((double)adj.get(x).size());
 		}
 		
-		if (adamicAdarIndex >= k) {
+		if (adamicAdarIndex > k) {
 			return true;
 		}
 		return false;

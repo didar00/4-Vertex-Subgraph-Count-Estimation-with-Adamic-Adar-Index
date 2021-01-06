@@ -3,15 +3,17 @@
 public class Test {
 
     public static void main(String[] args) {
-        UndirectedGraph g = new UndirectedGraph(0.5, 400727, 3200440, "input_files/Amazon0312.txt");
+        UndirectedGraph g = new UndirectedGraph(0.5, 410236, "input_files/Amazon0505.txt");
 	
 		
-		FourVertexSubgraphCounter counter = new FourVertexSubgraphCounter(g.E(), 
+		FourVertexSubgraphCounter counter = new FourVertexSubgraphCounter(g.edgeTauSize, g.E(), 
             g.W, g.offset, g.adj, g.edgeTau);
 			
 
-        counter.threePathSampler(1000);
+        //System.out.println("Edgegs " + g.E());
+        counter.threePathSampler(200000);
         counter.print();
+        System.out.println("index is 0.5");
 
         // 250, 1273 for medium txt
 

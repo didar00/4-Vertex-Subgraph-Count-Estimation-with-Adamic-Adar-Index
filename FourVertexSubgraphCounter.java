@@ -24,13 +24,17 @@ public class FourVertexSubgraphCounter {
 	public long W;
 	public long offset;
 
+	static long min_diff;
+	static int min_diff_key;
+	int edgeTauSize;
 
-	public FourVertexSubgraphCounter(int E, long W, long offset, ArrayList<ArrayList<Integer>> adj, long[][] edgeTau) {
+	public FourVertexSubgraphCounter(int edgeTauSize, int E, long W, long offset, ArrayList<ArrayList<Integer>> adj, long[][] edgeTau) {
 		this.adj = adj;
 		this.edgeTau = edgeTau;
 		this.E = E;
 		this.W = W;
 		this.offset = offset;
+		this.edgeTauSize = edgeTauSize;
 	}
 
     /** sampler algorithm to obtain a set of edges that compose a 3-path */
@@ -44,6 +48,12 @@ public class FourVertexSubgraphCounter {
 		Random rand = new Random();
 		long x = randomLong();
 
+		int index = maxDiff(x);
+
+		middleEdge[0] = (int) edgeTau[index+1][0];
+		middleEdge[1] = (int) edgeTau[index+1][1];
+
+/*
 		for (int i = 0; i < 2*E; i++) {
 			if (x < edgeTau[i][2]) {
 				if (i == 0) {
@@ -58,7 +68,7 @@ public class FourVertexSubgraphCounter {
 			}
 		}
 
-
+*/
 		/** selects the neighbors of the middle edge vertex */
 		int u = middleEdge[0];
 		int v = middleEdge[1];
@@ -227,16 +237,63 @@ public class FourVertexSubgraphCounter {
 
 	public void print() {
 		int c = 1;
+		/*
 		for (int i : count) {
 			System.out.println("count " + c + " is " + i);
 			c++;
 		}
 		c = 1;
+		*/
 		for (double i : motifs) {
 			System.out.println("Motif " + c + " is " + i);
 			c++;
 		}
 		
 	}
+
+	public void maxDiffUtil(int l, int r, long tau) 
+	{ 
+		if (r >= l){
+
+			int mid = l + (r-l)/2;
+
+			// If k itself is present 
+			if (edgeTau[mid][2] == tau) 
+			{ 
+				min_diff_key = mid; 
+				return; 
+			} 
+		
+			// update min_diff and min_diff_key by checking 
+			// current node value 
+			if (min_diff > Math.abs(edgeTau[mid][2] - tau)) 
+			{ 
+				min_diff = Math.abs(edgeTau[mid][2] - tau); 
+				min_diff_key = mid; 
+			} 
+		
+			// if k is less than ptr.key then move in 
+			// left subtree else in right subtree 
+			if (tau < edgeTau[mid][2]) 
+				maxDiffUtil(l, mid -1, tau); 
+			else
+				maxDiffUtil(mid+1, r, tau); 
+
+		}
+		return;
+	} 
+	
+	// Wrapper over maxDiffUtil() 
+	public int maxDiff(long k) 
+	{ 
+		// Initialize minimum difference 
+		min_diff = 999999999; min_diff_key = -1; 
+	
+		// Find value of min_diff_key (Closest key 
+		// in tree with k) 
+		maxDiffUtil(0, edgeTauSize-1, k); 
+	
+		return min_diff_key; 
+	} 
 	
 }
